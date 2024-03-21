@@ -3,10 +3,15 @@ import { JwtService } from '@nestjs/jwt/dist';
 import { Token } from 'src/common/types/global.type';
 import { User } from '../dto/request/user.dto';
 import { CreateUserRequest } from '../dto/request/create-user.dto';
+import { supabase } from './../../common/utils/supabase';
+import { SupabaseService } from './../../common/supabase/supabase.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    private supabaseService: SupabaseService,
+  ) {}
 
   async createToken(id: number): Promise<string> {
     const payload = { id };
@@ -20,40 +25,43 @@ export class AuthService {
     return token;
   }
 
-  //   async validate(payload: { id: number }) {
-  //     const { id } = payload;
-  //     const auth: User = await ;
-  //     if (!auth) throw new UnauthorizedException();
-  //     return auth;
-  //   }
+  // async validate(payload: { id: number }) {
+  //   const { id } = payload;
+  //   const auth: User = await this.supabaseService.selectQuery(
+  //     'auth',
+  //     'id, userId, email, nickname, profile',
+  //   );
+  //   if (!auth) throw new UnauthorizedException();
+  //   return auth;
+  // }
 
-  async saveUser(authDTO: CreateUserRequest): Promise<Token> {
-    const user = await this.authRepository.findOneBy({
-      userId: authDTO.id,
+  async saveUser(authDTO: CreateUserRequest) {
+    const { data, error } = await supabase.auth.signUp({
+      email: authDTO.email,
+      password: authDTO.password,
+      options: {
+        data: {
+          id: authDTO.id,
+          phone: authDTO.phone,
+          name: authDTO.name,
+        },
+      },
     });
 
-    if (user) {
-      const accessToken = await this.createToken(user.id);
-
-      const userId = user.userId;
-
-      return { accessToken, userId: userId };
+    console.log(data, error);
+    if (error) {
+      throw new UnauthorizedException();
     }
-
-    const newUser = await this.authRepository.createUser(authDTO);
-    const accessToken = await this.createToken(newUser.id);
-    const userId = newUser.userId;
-    return { accessToken, userId };
   }
 
   // 유저 확인. 다른곳들에도 쓰임 에러처리도 여기서하면 다른곳에서 사용할때 일일이 에러처리 안해도됨
   // Todo: checktExistingUser 문제 있음 수정 필요.
 
-  async checkExistingUser(user: User): Promise<void> {
-    const auth = await this.authRepository.findOneBy({ userId: user.userId });
+  // async checkExistingUser(user: User): Promise<void> {
+  //   const auth = await this.authRepository.findOneBy({ userId: user.userId });
 
-    if (!auth) {
-      throw new UnauthorizedException();
-    }
-  }
+  //   if (!auth) {
+  //     throw new UnauthorizedException();
+  //   }
+  // }
 }

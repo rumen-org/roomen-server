@@ -16,6 +16,13 @@ export class CreateUserRequest {
 
   @ApiField({
     type: String,
+    example: 'aisjdoij',
+    description: '유저 비밀번호',
+  })
+  password: string;
+
+  @ApiField({
+    type: String,
     example: 'bgh9651@gmail.com',
     description: '유저 이메일',
   })
