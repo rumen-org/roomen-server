@@ -4,6 +4,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './service/auth.service';
 import { SupabaseService } from 'src/common/supabase/supabase.service';
+import { SupabaseModule } from 'src/common/supabase/supabase.module';
 
 @Module({
   imports: [
@@ -12,9 +13,10 @@ import { SupabaseService } from 'src/common/supabase/supabase.service';
       secret: 'secret',
       signOptions: { expiresIn: '300m' },
     }),
+    SupabaseModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, SupabaseService],
+  providers: [AuthService],
   exports: [PassportModule],
 })
 export class AuthModule {}

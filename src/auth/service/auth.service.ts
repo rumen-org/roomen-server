@@ -1,29 +1,25 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt/dist';
+//import { JwtService } from '@nestjs/jwt';
 import { Token } from 'src/common/types/global.type';
 import { User } from '../dto/request/user.dto';
 import { CreateUserRequest } from '../dto/request/create-user.dto';
-import { supabase } from './../../common/utils/supabase';
 import { SupabaseService } from './../../common/supabase/supabase.service';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private jwtService: JwtService,
-    private supabaseService: SupabaseService,
-  ) {}
+  constructor(private supabaseService: SupabaseService) {}
 
-  async createToken(id: number): Promise<string> {
-    const payload = { id };
-    const token = this.jwtService.sign(payload);
-    return token;
-  }
+  // async createToken(id: number): Promise<string> {
+  //   const payload = { id };
+  //   const token = this.jwtService.sign(payload);
+  //   return token;
+  // }
 
-  async refreshToken(id: number): Promise<string> {
-    const payload = { id };
-    const token = this.jwtService.sign(payload, { expiresIn: '30d' });
-    return token;
-  }
+  // async refreshToken(id: number): Promise<string> {
+  //   const payload = { id };
+  //   const token = this.jwtService.sign(payload, { expiresIn: '30d' });
+  //   return token;
+  // }
 
   // async validate(payload: { id: number }) {
   //   const { id } = payload;
@@ -36,6 +32,7 @@ export class AuthService {
   // }
 
   async saveUser(authDTO: CreateUserRequest) {
+    const supabase = this.supabaseService.supabase();
     const { data, error } = await supabase.auth.signUp({
       email: authDTO.email,
       password: authDTO.password,

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { supabase } from '../utils/supabase';
+import { ConfigService } from '@nestjs/config';
+import { createClient } from '@supabase/supabase-js';
 
 interface QueryProps {
   query: string | number;
@@ -7,10 +8,17 @@ interface QueryProps {
 
 @Injectable()
 export class SupabaseService {
-  constructor() {}
+  constructor(private configService: ConfigService) {}
 
+  supabase() {
+    const supabaseUrl = this.configService.get('SUPABASE_URL');
+    const supabaseKey = this.configService.get('SUPABASE_KEY');
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    return supabase;
+  }
   async selectQuery(table: string, columns: string) {
     /* 타입 수정 예정*/
+    const supabase = this.supabase();
     const { data, error }: { data: any; error: any } = await supabase
       .from(table)
       .select(columns);
@@ -28,6 +36,7 @@ export class SupabaseService {
     column: QueryProps,
     value: { query: any; value: any },
   ) {
+    const supabase = this.supabase();
     const { data: result, error }: { data: any; error: any } = await supabase
       .from(table)
       .update(column)
