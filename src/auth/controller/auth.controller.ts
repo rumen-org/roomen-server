@@ -1,12 +1,6 @@
-import { Body, Controller, Post, Get, UseGuards, Param } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport/dist';
-import { Token } from 'src/common/types/global.type';
+import { Body, Controller, Post } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiCreatedResponse } from '@nestjs/swagger';
 import { AuthService } from '../service/auth.service';
-import { PatchApi } from 'src/common/decorator/api.decorator';
-import { User } from '../dto/request/user.dto';
-import { UpdateUserRequest } from '../dto/request/update-user.dto';
-import SuccessResponse from 'src/common/utils/success.response';
 import { CreateUserRequest } from '../dto/request/create-user.dto';
 @ApiTags('auth')
 @Controller('auth')

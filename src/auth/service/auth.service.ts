@@ -1,13 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 //import { JwtService } from '@nestjs/jwt';
-import { Token } from 'src/common/types/global.type';
-import { User } from '../dto/request/user.dto';
 import { CreateUserRequest } from '../dto/request/create-user.dto';
-import { SupabaseService } from './../../common/supabase/supabase.service';
+import { Supabase } from 'src/common/supabase/supabase';
 
 @Injectable()
 export class AuthService {
-  constructor(private supabaseService: SupabaseService) {}
+  constructor(private readonly supabase: Supabase) {}
 
   // async createToken(id: number): Promise<string> {
   //   const payload = { id };
@@ -32,8 +30,7 @@ export class AuthService {
   // }
 
   async saveUser(authDTO: CreateUserRequest) {
-    const supabase = this.supabaseService.supabase();
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await this.supabase.getClient().auth.signUp({
       email: authDTO.email,
       password: authDTO.password,
       options: {
