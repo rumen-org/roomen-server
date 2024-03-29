@@ -1,11 +1,11 @@
 import { ApiField } from 'src/common/decorator/api.decorator';
 export class CreateUserRequest {
   @ApiField({
-    type: String,
-    example: '12',
+    type: Number,
+    example: 12,
     description: '아이디',
   })
-  id: string;
+  id: number;
 
   @ApiField({
     type: String,

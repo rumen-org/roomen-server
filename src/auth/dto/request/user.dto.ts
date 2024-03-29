@@ -1,4 +1,5 @@
-import { ApiField } from 'src/common/decorator/api.decorator';
+import { Cart } from 'src/cart/dto/cart.dto';
+import { ApiField, ApiNestedField } from 'src/common/decorator/api.decorator';
 export class User {
   @ApiField({
     type: String,
@@ -27,6 +28,20 @@ export class User {
     description: '유저 전화번호',
   })
   phone: string;
+
+  @ApiNestedField({
+    type: Cart,
+    example: '유저의 장바구니 정보',
+    description: '유저의 장바구니 정보가 들어있습니다. 수량, 색상 등..',
+  })
+  cart: Cart;
+
+  @ApiNestedField({
+    type: [String],
+    example: ['신정n동 123-123 서울특별시 강서구'],
+    description: '유저 배송지 정보',
+  })
+  addresses: string[];
 
   @ApiField({
     type: Date,
