@@ -37,7 +37,6 @@ export class AuthController {
     type: CreateUserRequest,
   })
   async createUser(@Body() authDTO: CreateUserRequest) {
-    console.log('hihi', authDTO);
     return this.authService.saveUser(authDTO);
   }
 }

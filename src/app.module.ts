@@ -5,6 +5,8 @@ import { AuthController } from './auth/controller/auth.controller';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { SupabaseModule } from './common/supabase/supabase.module';
+import { CartModule } from './cart/cart.module';
+import { CartController } from './cart/controller/cart.controller';
 
 @Module({
   imports: [
@@ -13,8 +15,9 @@ import { SupabaseModule } from './common/supabase/supabase.module';
     }),
     AuthModule,
     SupabaseModule,
+    CartModule,
   ],
-  controllers: [AppController, AuthController],
+  controllers: [AppController, AuthController, CartController],
   providers: [AppService],
 })
 export class AppModule {}

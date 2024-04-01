@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
-import { CartController } from './cart.controller';
-import { CartService } from './cart.service';
+import { CartService } from './service/cart.service';
+import { CartController } from './controller/cart.controller';
+import { SupabaseModule } from 'src/common/supabase/supabase.module';
 
 @Module({
-    controllers: [CartController],
-    providers: [CartService],
+  imports: [SupabaseModule],
+  controllers: [CartController],
+  providers: [CartService],
+  exports: [CartService],
 })
 export class CartModule {}

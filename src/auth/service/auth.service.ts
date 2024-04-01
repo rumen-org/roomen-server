@@ -35,18 +35,6 @@ export class AuthService {
   // }
 
   async saveUser(authDTO: CreateUserRequest) {
-    const { data: user } = await this.supabase
-      .getClient()
-      .from('users')
-      .select(authDTO.email);
-
-    console.log(user, 'user');
-    if (user) {
-      return {
-        data: '이미 존재하는 이메일입니다. 아이디 찾기를 통해서 찾아주세요!',
-      };
-    }
-
     const { data, error } = await this.supabase.getClient().auth.signUp({
       email: authDTO.email,
       password: authDTO.password,
@@ -59,8 +47,8 @@ export class AuthService {
       },
     });
 
-    console.log(data.user.id, 'id');
-    const accessToken = await this.createToken(Number(data.user.id));
+    console.log(data, 'data');
+    const accessToken = await this.createToken(Number(data?.user?.id));
 
     if (error) {
       throw new UnauthorizedException();

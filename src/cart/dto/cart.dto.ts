@@ -2,6 +2,13 @@ import { ApiField, ApiNestedField } from 'src/common/decorator/api.decorator';
 export class Cart {
   @ApiField({
     type: String,
+    example: 1,
+    description: '상품 아이디',
+  })
+  id: number;
+
+  @ApiField({
+    type: String,
     example: 'red',
     description: '색상1 : 상판 하부다리, 후면가림판 색상',
   })
