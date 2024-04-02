@@ -7,9 +7,12 @@ import { AuthModule } from './auth/auth.module';
 import { SupabaseModule } from './common/supabase/supabase.module';
 import { CartModule } from './cart/cart.module';
 import { CartController } from './cart/controller/cart.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeORMConfig } from './common/configs/typeorm.config';
 
 @Module({
   imports: [
+    TypeOrmModule.forRoot(typeORMConfig),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
