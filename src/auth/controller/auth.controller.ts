@@ -6,11 +6,15 @@ import { User } from '../dto/request/user.dto';
 import { UpdateUserRequest } from '../dto/request/update-user.dto';
 import SuccessResponse from 'src/common/utils/success.response';
 import { PatchApi, PostApi } from 'src/common/decorator/api.decorator';
+import { UserService } from './../service/user.service';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private userService: UserService,
+  ) {}
 
   @PatchApi(() => User, {
     path: '/modify/:id',
@@ -23,7 +27,7 @@ export class AuthController {
   ): Promise<SuccessResponse> {
     //TODO : accessTOken type설정
     console.log(request, '업데이트를 한다 ..');
-    return this.authService.updateUser(id, request);
+    return this.userService.updateUser(id, request);
   }
 
   @PostApi(() => User, {

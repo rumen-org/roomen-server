@@ -1,18 +1,22 @@
 import { CustomRepository } from 'src/common/configs/typeorm.decorator';
 import { Repository } from 'typeorm';
 import { User } from '../entity/user.entity';
-import { CreateUserRequest } from '../dto/request/user/create-request';
+import { CreateUserRequest } from '../dto/request/create-user.dto';
 
 @CustomRepository(User)
 export class AuthRepository extends Repository<User> {
   async createUser(authDTO: CreateUserRequest): Promise<User> {
-    const { name, image, email, provider, id } = authDTO;
+    const { id, userId, name, createdAt, phone, password, updatedAt, email } =
+      authDTO;
     const user = await this.create({
-      userId: id,
+      id,
+      userId,
       name,
+      createdAt,
+      phone,
+      password,
+      updatedAt,
       email,
-      image,
-      provider,
     });
 
     await this.save(user);

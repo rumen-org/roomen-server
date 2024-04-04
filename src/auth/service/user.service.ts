@@ -1,43 +1,41 @@
-import { Injectable } from '@nestjs/common';
-import { User } from '../models/user.model';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import SuccessResponse from 'src/common/utils/success.response';
+import { User } from '../entity/user.entity';
+//import { UpdateUserRequest } from '../dto/request/update-user.dto';
+import { UserRepository } from '../repository/user.repository';
+import { UpdateUserRequest } from '../dto/request/update-user.dto';
 
 @Injectable()
 export class UserService {
-  private users: User[] = [];
+  constructor(private userRepository: UserRepository) {}
 
-  createUser(user: User): User {
-    // Logic to create a new user
-    this.users.push(user);
-    return user;
+  async getUserbyId(id: number): Promise<User> {
+    return this.userRepository.findOneBy({ id });
   }
 
-  getUsers(): User[] {
-    // Logic to get all users
-    return this.users;
-  }
+  async updateUser(
+    id: number,
+    request: UpdateUserRequest,
+  ): Promise<SuccessResponse> {
+    const updated = await this.userRepository.update(
+      id,
+      request.getAuthFields(),
+    );
 
-  getUserById(id: string): User {
-    // Logic to get a user by ID
-    return this.users.find((user) => user.id === id);
-  }
-
-  updateUser(id: string, updatedUser: User): User {
-    // Logic to update a user
-    const userIndex = this.users.findIndex((user) => user.id === id);
-    if (userIndex !== -1) {
-      this.users[userIndex] = { ...this.users[userIndex], ...updatedUser };
-      return this.users[userIndex];
+    if (updated.affected === 0) {
+      throw new NotFoundException(`${id} 이 유저는 수정할 수 없습니다.`);
     }
-    return null;
+
+    return SuccessResponse.fromSuccess(true);
   }
 
-  deleteUser(id: string): boolean {
-    // Logic to delete a user
-    const userIndex = this.users.findIndex((user) => user.id === id);
-    if (userIndex !== -1) {
-      this.users.splice(userIndex, 1);
-      return true;
+  async deleteUser(id: number) {
+    const user = await this.userRepository.delete(id);
+
+    if (user.affected === 0) {
+      throw new NotFoundException(`${id} 이 유저는 지울 수 없습니다.`);
     }
-    return false;
+
+    return SuccessResponse.fromSuccess(true);
   }
 }

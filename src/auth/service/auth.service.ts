@@ -1,14 +1,14 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserRequest } from '../dto/request/create-user.dto';
-import { Supabase } from 'src/common/supabase/supabase';
-import { UpdateUserRequest } from '../dto/request/update-user.dto';
-import SuccessResponse from 'src/common/utils/success.response';
+import { AuthRepository } from '../repository/auth.repository';
+import { Token } from '../security/token.interface';
+import { User } from '../entity/user.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly supabase: Supabase,
+    private authRepository: AuthRepository,
     private jwtService: JwtService,
   ) {}
 
@@ -34,51 +34,30 @@ export class AuthService {
   //   return auth;
   // }
 
-  async saveUser(authDTO: CreateUserRequest) {
-    const { data, error } = await this.supabase.getClient().auth.signUp({
-      email: authDTO.email,
-      password: authDTO.password,
-      options: {
-        data: {
-          id: authDTO.id,
-          phone: authDTO.phone,
-          name: authDTO.name,
-        },
-      },
+  async saveUser(authDTO: CreateUserRequest): Promise<Token> {
+    const user = await this.authRepository.findOneBy({
+      userId: String(authDTO.id),
     });
 
-    console.log(data, 'data');
-    const accessToken = await this.createToken(Number(data?.user?.id));
+    if (user) {
+      const accessToken = await this.createToken(user.id);
 
-    if (error) {
-      throw new UnauthorizedException();
+      const userId = user.userId;
+
+      return { accessToken, userId: userId };
     }
 
-    return { data, accessToken };
+    const newUser = await this.authRepository.createUser(authDTO);
+    const accessToken = await this.createToken(newUser.id);
+    const userId = newUser.userId;
+    return { accessToken, userId };
   }
 
-  async updateUser(id: number, authDTO: UpdateUserRequest) {
-    const { data, error } = await this.supabase
-      .getClient()
-      .from('users')
-      .update({
-        email: authDTO.email,
-        password: authDTO.password,
-        options: {
-          data: {
-            id,
-            phone: authDTO.phone,
-            name: authDTO.name,
-          },
-        },
-      })
-      .eq('id', authDTO.id);
-    console.log(data, error);
+  async checkExistingUser(user: User): Promise<void> {
+    const auth = await this.authRepository.findOneBy({ userId: user.userId });
 
-    if (error) {
+    if (!auth) {
       throw new UnauthorizedException();
     }
-
-    return SuccessResponse.fromSuccess(true);
   }
 }

@@ -9,6 +9,13 @@ export class UpdateUserRequest {
 
   @ApiField({
     type: String,
+    example: '12',
+    description: '유저 아이디',
+  })
+  userId: string;
+
+  @ApiField({
+    type: String,
     example: '김인태',
     description: '유저 이름',
   })
@@ -41,4 +48,13 @@ export class UpdateUserRequest {
     description: '수정 날짜',
   })
   updatedAt!: Date;
+
+  getAuthFields() {
+    return {
+      userId: this.userId,
+      email: this.email,
+      name: this.name,
+      password: this.password,
+    };
+  }
 }

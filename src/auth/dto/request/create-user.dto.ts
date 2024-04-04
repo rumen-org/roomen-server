@@ -9,6 +9,13 @@ export class CreateUserRequest {
 
   @ApiField({
     type: String,
+    example: '102983-019938019-1039',
+    description: '아이디',
+  })
+  userId: string;
+
+  @ApiField({
+    type: String,
     example: '김인태',
     description: '유저 이름',
   })
