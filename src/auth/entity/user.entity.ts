@@ -10,6 +10,9 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+type Address = {
+  address: string;
+};
 @Entity()
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -30,19 +33,19 @@ export class User extends BaseEntity {
   @Column({ type: String, nullable: false })
   phone!: string;
 
-  @Column({ type: 'varchar', array: true, nullable: false })
-  address!: string[];
+  @Column({ type: 'json', nullable: false })
+  address!: Address;
 
   @OneToOne(() => Cart, (cart) => cart.user)
   @JoinColumn()
   cart!: string[];
 
-  @Column({ type: String, nullable: true })
+  @Column({ type: Date, nullable: true })
   expires!: Date;
 
   @CreateDateColumn({ type: 'timestamp' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
-  updatedAt: Date;
+  updatedAt!: Date;
 }
