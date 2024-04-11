@@ -1,10 +1,11 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { User } from 'src/auth/entity/user.entity';
 import { Cart } from 'src/cart/entity/cart.entity';
+import { Notice } from 'src/notice/entity/notice.entity';
 import { ProductCart } from 'src/product/entity/product-cart.entity';
 import { Product } from 'src/product/entity/product.entity';
 
-const entityArray = [Cart, User, ProductCart, Product];
+const entityArray = [Cart, User, ProductCart, Product, Notice];
 
 export const typeORMConfig: TypeOrmModuleOptions = {
   type: 'mysql',

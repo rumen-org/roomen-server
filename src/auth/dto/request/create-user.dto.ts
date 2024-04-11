@@ -41,18 +41,4 @@ export class CreateUserRequest {
     description: '유저 전화번호',
   })
   phone: string;
-
-  @ApiField({
-    type: Date,
-    example: '2021-08-01T00:00:00.000Z',
-    description: '회원가입 날짜',
-  })
-  createdAt!: Date;
-
-  @ApiField({
-    type: Date,
-    example: '2021-08-01T00:00:00.000Z',
-    description: '수정 날짜',
-  })
-  updatedAt!: Date;
 }

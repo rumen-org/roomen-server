@@ -5,6 +5,8 @@ import { AuthModule } from './auth/auth.module';
 import { CartModule } from './cart/cart.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeORMConfig } from './common/configs/typeorm.config';
+import { MyPageModule } from './mypage/mypage.module';
+import { NoticeModule } from './notice/notice.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { typeORMConfig } from './common/configs/typeorm.config';
     }),
     AuthModule,
     CartModule,
+    MyPageModule,
+    NoticeModule,
   ],
   controllers: [],
   providers: [AppService],

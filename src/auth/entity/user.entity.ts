@@ -1,10 +1,12 @@
 import { Cart } from 'src/cart/entity/cart.entity';
+import { Notice } from 'src/notice/entity/notice.entity';
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -35,6 +37,10 @@ export class User extends BaseEntity {
 
   @Column({ type: 'json', nullable: false })
   address!: Address;
+
+  @OneToMany(() => Notice, (notice) => notice.user)
+  @JoinColumn()
+  notice: Notice;
 
   @OneToOne(() => Cart, (cart) => cart.user)
   @JoinColumn()
