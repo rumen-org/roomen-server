@@ -1,23 +1,23 @@
 import { ApiField, ApiNestedField } from 'src/common/decorator/api.decorator';
 export class UpdateCartDto {
   @ApiField({
-    type: String,
-    example: 'red',
-    description: '색상1 : 상판 하부다리, 후면가림판 색상',
+    type: Number,
+    example: '1231200dd',
+    description: '사용자 아이디',
   })
-  color1: string;
-
-  @ApiField({
-    type: String,
-    example: 'red',
-    description: '색상2 : 건반트레이, 다리, 상단선반, 칸막이',
-  })
-  color2: string;
+  userId: string;
 
   @ApiField({
     type: Number,
     example: 1,
-    description: '미디 데스크 수량',
+    description: '상품 아이디',
+  })
+  id: number;
+
+  @ApiField({
+    type: Number,
+    example: 1,
+    description: '상품의 수량',
   })
   quantity: number;
 
@@ -34,4 +34,10 @@ export class UpdateCartDto {
     description: '배송비, 추가옵션을 포함한 총 가격',
   })
   totalPrice: string;
+
+  getAuthFields() {
+    return {
+      userId: this.userId,
+    };
+  }
 }

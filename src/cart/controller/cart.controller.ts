@@ -1,5 +1,5 @@
 import { Body, Controller, Param } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiCreatedResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import SuccessResponse from 'src/common/utils/success.response';
 import { PatchApi, PostApi } from 'src/common/decorator/api.decorator';
 import { CartService } from '../service/cart.service';
@@ -13,25 +13,24 @@ export class CartController {
   constructor(private cartService: CartService) {}
 
   @PostApi(() => Cart, {
-    path: '/',
-    description: '장바구니에 담기.',
+    path: '/:id',
+    description: '장바구니에 담기. , 파라미터는 userId',
     auth: true,
   })
   @ApiOperation({
     summary: '장바구니에 물품을 담는다.',
     description: '장바구니에 물품을 담는다.',
   })
-  @ApiCreatedResponse({
-    description: '장바구니에 물품 담기..',
-    type: AddCartDto,
-  })
-  async addToCart(@Body() cartDto: AddCartDto) {
-    return this.cartService.addToCart(cartDto);
+  async addToCart(
+    @Param() id: number,
+    @Body() cartDto: AddCartDto,
+  ): Promise<SuccessResponse> {
+    return this.cartService.addToCart(id, cartDto);
   }
 
   @PatchApi(() => UpdateCartDto, {
     path: '/modify/:id',
-    description: '장바구니 정보 수정',
+    description: '장바구니 정보 수정 , 파라미터는 userId',
     auth: true,
   })
   updateCart(
@@ -40,6 +39,6 @@ export class CartController {
   ): Promise<SuccessResponse> {
     //TODO : accessTOken type설정
     console.log(request, '업데이트를 한다 ..');
-    return this.cartService.updateUser(id, request);
+    return this.cartService.changeOption(id, request);
   }
 }

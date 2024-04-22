@@ -1,25 +1,18 @@
 import { ApiField, ApiNestedField } from 'src/common/decorator/api.decorator';
 export class AddCartDto {
   @ApiField({
-    type: String,
-    example: 'red',
-    description: '색상1 : 상판 하부다리, 후면가림판 색상',
-  })
-  color1: string;
-
-  @ApiField({
-    type: String,
-    example: 'red',
-    description: '색상2 : 건반트레이, 다리, 상단선반, 칸막이',
-  })
-  color2: string;
-
-  @ApiField({
     type: Number,
     example: 1,
-    description: '미디 데스크 수량',
+    description: '제품 아이디',
   })
-  quantity: number;
+  id: number;
+
+  @ApiField({
+    type: String,
+    example: '',
+    description: '제품이름',
+  })
+  name: string;
 
   @ApiNestedField({
     type: [String],

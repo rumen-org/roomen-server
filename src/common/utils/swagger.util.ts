@@ -3,8 +3,8 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 export function setupSwagger(app: INestApplication): void {
   const config = new DocumentBuilder()
-    .setTitle('DevMet')
-    .setDescription('DevMet API 명세')
+    .setTitle('Roomen')
+    .setDescription('Roomen API 명세')
     .setVersion('1.0')
     .addBearerAuth(
       { type: 'http', scheme: 'bearer', name: 'JWT', in: 'header' },
