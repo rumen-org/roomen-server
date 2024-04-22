@@ -1,0 +1,41 @@
+name: Roomen Deployment
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+
+  deploy:
+    runs-on: ubuntu-20.04
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v2
+      with:
+        node-version: '20.x'
+        
+    - name: Install dependencies
+      run: npm install
+      working-directory: roomen-server
+      
+    - name: Build application
+      run: npm run build
+      working-directory: roomen-server
+      
+    - name: Deploy to EC2
+      env:
+        HOST: ${{ secrets.EC2_HOST }}
+        USERNAME: ${{ secrets.EC2_USERNAME }}
+        SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+      run: |
+        echo "$SSH_KEY" > ec2_ssh_key.pem
+        chmod 400 ec2_ssh_key.pem
+        ssh -o StrictHostKeyChecking=no -i ec2_ssh_key.pem $USERNAME@$HOST <<EOF
+        cd roomen-server
+        git pull origin master
+        npm run build
+        pm2 restart roomen-server
+        EOF
