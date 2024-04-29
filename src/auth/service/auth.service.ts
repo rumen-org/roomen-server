@@ -1,9 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserRequest } from '../dto/request/create-user.dto';
+import { AuthRequest } from '../dto/request/create-user.dto';
 import { AuthRepository } from '../repository/auth.repository';
-import { Token } from '../security/token.interface';
 import { User } from '../entity/user.entity';
+import SuccessResponse from 'src/common/utils/success.response';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -34,23 +35,28 @@ export class AuthService {
   //   return auth;
   // }
 
-  async saveUser(authDTO: CreateUserRequest): Promise<Token> {
-    const user = await this.authRepository.findOneBy({
-      userId: String(authDTO.id),
-    });
+  async saveUser(authDTO: AuthRequest): Promise<SuccessResponse> {
+    const { email } = authDTO;
+    const existingUser = await this.authRepository.findOneBy({ email: email });
+    //null 일 때 실행
+    if (existingUser) {
+      return { success: true, message: '이미 존재하는 이메일입니다.' };
+    }
+    const hashPassword = await this.hashPassword(authDTO.password);
+    authDTO.password = hashPassword;
+    await this.authRepository.createUser(authDTO);
+    return { success: true };
+  }
 
-    if (user) {
-      const accessToken = await this.createToken(user.id);
+  async loginUser(authDTO: AuthRequest): Promise<string> {
+    const user = await this.authRepository.findOneBy({ email: authDTO.email });
 
-      const userId = user.userId;
-
-      return { accessToken, userId: userId };
+    if (!user) {
+      throw new UnauthorizedException();
     }
 
-    const newUser = await this.authRepository.createUser(authDTO);
-    const accessToken = await this.createToken(newUser.id);
-    const userId = newUser.userId;
-    return { accessToken, userId };
+    const token = await this.createToken(user.id);
+    return token;
   }
 
   async checkExistingUser(user: User): Promise<void> {
@@ -59,5 +65,9 @@ export class AuthService {
     if (!auth) {
       throw new UnauthorizedException();
     }
+  }
+
+  async hashPassword(password: string): Promise<string> {
+    return await bcrypt.hash(password, 11);
   }
 }

@@ -5,6 +5,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Generated,
   JoinColumn,
   OneToMany,
   OneToOne,
@@ -15,7 +16,7 @@ import {
 type Address = {
   address: string;
 };
-@Entity()
+@Entity({ name: 'user' })
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -27,9 +28,11 @@ export class User extends BaseEntity {
   name!: string;
 
   @Column({ type: String, nullable: false })
+  @Generated('uuid')
   userId!: string;
 
   @Column({ type: String, nullable: false })
+  @IsEmail
   email!: string;
 
   @Column({ type: String, nullable: false })
