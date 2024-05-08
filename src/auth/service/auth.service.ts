@@ -5,6 +5,8 @@ import { AuthRepository } from '../repository/auth.repository';
 import { User } from '../entity/user.entity';
 import SuccessResponse from 'src/common/utils/success.response';
 import * as bcrypt from 'bcrypt';
+import { Token } from 'src/common/types/global.type';
+import { LoginRequest } from '../dto/request/login-request.dto';
 
 @Injectable()
 export class AuthService {
@@ -48,15 +50,22 @@ export class AuthService {
     return { success: true };
   }
 
-  async loginUser(authDTO: AuthRequest): Promise<string> {
-    const user = await this.authRepository.findOneBy({ email: authDTO.email });
+  async loginUser(loginDto: LoginRequest): Promise<Token> {
+    const user = await this.authRepository.findOne({
+      where: { email: loginDto.email },
+    });
 
-    if (!user) {
-      throw new UnauthorizedException();
+    const isPasswordValid = await bcrypt.compare(
+      loginDto.password,
+      user.password,
+    );
+
+    if (!user || !isPasswordValid) {
+      throw new UnauthorizedException('Invalid credentials');
     }
 
     const token = await this.createToken(user.id);
-    return token;
+    return { accessToken: token, userId: user.userId };
   }
 
   async checkExistingUser(user: User): Promise<void> {

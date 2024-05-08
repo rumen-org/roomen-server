@@ -1,5 +1,5 @@
 import { ApiField } from 'src/common/decorator/api.decorator';
-export class AuthRequest {
+export class AuthResponse {
   @ApiField({
     type: String,
     example: '김인태',

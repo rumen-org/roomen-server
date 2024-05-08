@@ -6,9 +6,8 @@ import { AuthRequest } from '../dto/request/create-user.dto';
 @CustomRepository(User)
 export class AuthRepository extends Repository<User> {
   async createUser(authDTO: AuthRequest): Promise<User> {
-    const { userId, name, phone, password, email } = authDTO;
+    const { name, phone, password, email } = authDTO;
     const user = await this.create({
-      userId,
       name,
       phone,
       password,

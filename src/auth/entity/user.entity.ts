@@ -1,3 +1,4 @@
+import { IsEmail } from 'class-validator';
 import { Cart } from 'src/cart/entity/cart.entity';
 import { Notice } from 'src/notice/entity/notice.entity';
 import {
@@ -32,7 +33,7 @@ export class User extends BaseEntity {
   userId!: string;
 
   @Column({ type: String, nullable: false })
-  @IsEmail
+  @IsEmail()
   email!: string;
 
   @Column({ type: String, nullable: false })

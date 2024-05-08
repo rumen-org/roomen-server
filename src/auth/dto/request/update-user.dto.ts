@@ -1,13 +1,6 @@
 import { ApiField } from 'src/common/decorator/api.decorator';
 export class UpdateUserRequest {
   @ApiField({
-    type: Number,
-    example: '12',
-    description: '아이디',
-  })
-  id: number;
-
-  @ApiField({
     type: String,
     example: '12',
     description: '유저 아이디',
@@ -25,6 +18,7 @@ export class UpdateUserRequest {
     type: String,
     example: 'alsidhaishdk',
     description: '유저 비밀번호',
+    nullable: true,
   })
   password: string;
 
@@ -41,13 +35,6 @@ export class UpdateUserRequest {
     description: '유저 전화번호',
   })
   phone: string;
-
-  @ApiField({
-    type: Date,
-    example: '2021-08-01T00:00:00.000Z',
-    description: '수정 날짜',
-  })
-  updatedAt!: Date;
 
   getAuthFields() {
     return {

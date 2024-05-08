@@ -8,10 +8,10 @@ import { Repository } from 'typeorm';
 @CustomRepository(User)
 export class UserRepository extends Repository<User> {
   async updateUser(request: UpdateUserRequest): Promise<SuccessResponse> {
-    const { userId, email, id, name, password, phone } = request;
+    const { userId, email, name, password, phone } = request;
     const user = await this.update(userId, {
       email,
-      id,
+
       name,
       password,
       phone,
