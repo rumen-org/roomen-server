@@ -15,9 +15,10 @@ import { UserRepository } from './repository/user.repository';
     TypeOrmExModule.forCustomRepository([AuthRepository, UserRepository]),
     PassportModule.register({ defaultStrategy: 'jwt', session: false }),
     JwtModule.registerAsync({
+      global: true,
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        secret: config.get<string>('SUPABASE_JWT_SECRET'),
+        secret: config.get<string>('JWT_SECRET'),
         signOptions: { expiresIn: '300m' },
       }),
     }),
