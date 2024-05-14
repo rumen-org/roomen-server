@@ -39,7 +39,7 @@ export class User extends BaseEntity {
   @Column({ type: String, nullable: false })
   phone!: string;
 
-  @Column({ type: 'json', nullable: false })
+  @Column({ type: 'json', nullable: true })
   address!: Address;
 
   @OneToMany(() => Notice, (notice) => notice.user)

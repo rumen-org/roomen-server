@@ -38,12 +38,14 @@ export class AuthService {
   // }
 
   async saveUser(authDTO: AuthRequest): Promise<SuccessResponse> {
+    console.log(authDTO, 'pp');
     const { email } = authDTO;
     const existingUser = await this.authRepository.findOneBy({ email: email });
     //null 일 때 실행
     if (existingUser) {
       return { success: true, message: '이미 존재하는 이메일입니다.' };
     }
+
     const hashPassword = await this.hashPassword(authDTO.password);
     authDTO.password = hashPassword;
     await this.authRepository.createUser(authDTO);
@@ -77,6 +79,7 @@ export class AuthService {
   }
 
   async hashPassword(password: string): Promise<string> {
-    return await bcrypt.hash(password, 11);
+    const salt = 10;
+    return await bcrypt.hash(password, salt);
   }
 }
