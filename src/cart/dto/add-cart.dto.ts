@@ -27,11 +27,4 @@ export class AddCartDto {
     description: '배송비, 추가옵션을 포함한 총 가격',
   })
   totalPrice: string;
-
-  @ApiField({
-    type: String,
-    example: 'aksjdlkajsdlj9ajsdlijw',
-    description: 'jwt 토큰',
-  })
-  accessToken: string;
 }
