@@ -9,21 +9,21 @@ export class AuthRequest {
 
   @ApiField({
     type: String,
-    example: 'aisjdoij',
+    example: '123123',
     description: '유저 비밀번호',
   })
   password: string;
 
   @ApiField({
     type: String,
-    example: 'bgh9651@gmail.com',
+    example: 'admin@gmail.com',
     description: '유저 이메일',
   })
   email: string;
 
   @ApiField({
     type: String,
-    example: '010-6856-7378',
+    example: '010-1111-1111',
     description: '유저 전화번호',
   })
   phone: string;

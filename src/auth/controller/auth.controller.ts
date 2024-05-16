@@ -1,5 +1,12 @@
-import { Body, Controller, Param } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Body, Controller, Param, UseGuards } from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiParam,
+  ApiHeader,
+} from '@nestjs/swagger';
 import { AuthService } from '../service/auth.service';
 import { AuthRequest } from '../dto/request/create-user.dto';
 import { UpdateUserRequest } from '../dto/request/update-user.dto';
@@ -9,6 +16,7 @@ import { UserService } from './../service/user.service';
 import { Token } from './../security/token.interface';
 import { LoginRequest } from '../dto/request/login-request.dto';
 import { User } from '../entity/user.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -17,11 +25,25 @@ export class AuthController {
     private authService: AuthService,
     private userService: UserService,
   ) {}
-
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
   @PatchApi(() => {}, {
     path: '/modify/:id',
     description: '유저 정보 수정',
     auth: true,
+  })
+  @ApiParam({
+    name: 'id',
+    description: '유저 아이디',
+    required: true,
+    example: 1,
+  })
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer access-token, 로그인에서 발급 받은 뒤에 사용하세요!',
+    required: true,
+    example:
+      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzE1ODIzOTAyLCJleHAiOjE3MTU4NDE5MDJ9.4RAm1XCj8QGgrNvm7b2u1C8x010r0k80PJaOUFitLNY',
   })
   @ApiResponse({
     status: 200,
@@ -67,6 +89,7 @@ export class AuthController {
     description: '유저 로그인',
     auth: false,
   })
+  @ApiBearerAuth('access-token')
   @ApiOperation({ summary: '유저 로그인', description: '유저 로그인' })
   @ApiResponse({
     status: 200,
