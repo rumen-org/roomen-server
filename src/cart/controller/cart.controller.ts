@@ -23,7 +23,7 @@ export class CartController {
     description: 'Bearer access-token, 로그인에서 발급 받은 뒤에 사용하세요!',
     required: true,
     example:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzE1ODI1MjYwLCJleHAiOjE3MTU4NDMyNjB9.Ie4kanAi8n8_HWWCqA7vh_o9XyND6PvzcGn_cNgmMOU',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzE1ODI1MjYwLCJleHAiOjE3MTU4NDMyNjB9.Ie4kanAi87dOU',
   })
   @UseGuards(AuthGuard('jwt'))
   @ApiOperation({
@@ -51,3 +51,4 @@ export class CartController {
     return this.cartService.changeOption(id, request);
   }
 }
+
