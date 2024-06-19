@@ -48,7 +48,7 @@ export class User extends BaseEntity {
 
   @OneToOne(() => Cart, (cart) => cart.user)
   @JoinColumn()
-  cart!: string[];
+  cart: Cart;
 
   @Column({ type: Date, nullable: true })
   expires!: Date;
