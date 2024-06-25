@@ -14,11 +14,11 @@ export class CartRepository extends Repository<Cart> {
   }
 
   async updateCart(
-    id: number,
+    userId: string,
     request: UpdateCartDto,
   ): Promise<SuccessResponse> {
-    const cart = await this.update(id, request);
+    const cart = await this.update(userId, request);
     console.log(cart);
-    return { success: true };
+    return { success: true, message: '카트가 업데이트 되었습니다.' };
   }
 }
