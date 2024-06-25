@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeORMConfig } from './common/configs/typeorm.config';
 import { MyPageModule } from './mypage/mypage.module';
 import { NoticeModule } from './notice/notice.module';
+import { QnaModule } from './qna/qna.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { NoticeModule } from './notice/notice.module';
     CartModule,
     MyPageModule,
     NoticeModule,
+    QnaModule,
   ],
   controllers: [],
   providers: [AppService],

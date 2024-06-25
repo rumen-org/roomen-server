@@ -4,8 +4,10 @@ import { Cart } from 'src/cart/entity/cart.entity';
 import { Notice } from 'src/notice/entity/notice.entity';
 import { ProductCart } from 'src/product/entity/product-cart.entity';
 import { Product } from 'src/product/entity/product.entity';
+import { Comment } from 'src/qna/entity/qna.comment.entity';
+import { Qna } from 'src/qna/entity/qna.entity';
 
-const entityArray = [Cart, User, ProductCart, Product, Notice];
+const entityArray = [Cart, User, ProductCart, Product, Notice, Qna, Comment];
 
 export const typeORMConfig: TypeOrmModuleOptions = {
   type: 'mysql',
