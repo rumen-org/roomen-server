@@ -1,5 +1,5 @@
 import { Body, Controller, Param, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiHeader } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiHeader, ApiResponse } from '@nestjs/swagger';
 import SuccessResponse from 'src/common/utils/success.response';
 import { PatchApi, PostApi } from 'src/common/decorator/api.decorator';
 import { CartService } from '../service/cart.service';
@@ -26,7 +26,7 @@ export class CartController {
   })
   @UseGuards(AuthGuard('jwt'))
   @ApiOperation({
-    summary: '장바구니에 물품을 담는다.',
+    summary: '장바구니에 물품을 담는다. 루멘 미디어 데스크 productId = 1',
     description: '장바구니에 물품을 담는다.',
   })
   async addToCart(
