@@ -21,18 +21,21 @@ export class Qna extends BaseEntity {
   @Column({ type: 'varchar', nullable: false })
   writer!: string;
 
-  @Column({ type: 'timestamp', nullable: false })
+  @Column({ type: 'longtext', nullable: false })
+  content!: string;
+
+  @Column({ type: 'timestamp', nullable: true })
   createdAt: Date;
 
   @Column({ type: 'boolean', nullable: false })
-  privated: boolean;
+  secret: boolean;
 
   @Column({ type: 'varchar', nullable: false })
   password: string;
 
   @Column({ type: 'varchar', nullable: false })
-  image: string;
+  image!: string;
 
   @OneToMany(() => Comment, (comment) => comment.qna)
-  comments: Comment[];
+  comments!: Comment[];
 }
